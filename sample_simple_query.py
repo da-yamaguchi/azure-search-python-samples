@@ -22,6 +22,10 @@ USAGE:
 
 import os
 
+os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"] = "https://link-tech-cognitive-search.search.windows.net"
+os.environ["AZURE_SEARCH_INDEX_NAME"] = "vector-kitei"
+os.environ["AZURE_SEARCH_API_KEY"] = "xxx"
+
 service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
 index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]
 key = os.environ["AZURE_SEARCH_API_KEY"]
@@ -34,11 +38,16 @@ def simple_text_query():
 
     search_client = SearchClient(service_endpoint, index_name, AzureKeyCredential(key))
 
-    results = search_client.search(search_text="spa")
+    results = search_client.search(search_text="代休")
 
-    print("Hotels containing 'spa' in the name (or other fields):")
-    for result in results:
-        print("    Name: {} (rating {})".format(result["hotelName"], result["rating"]))
+    results = list(results)  # ページング結果をリストに変換
+    if results:
+        print("chunk: {}".format(results[0]["chunk"]))
+        print("title: {}".format(results[0]["title"]))
+
+    # for result in results:
+        # print("    Name: {}".format(result["chunk"]))
+
     # [END simple_query]
 
 

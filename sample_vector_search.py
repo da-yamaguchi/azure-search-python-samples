@@ -27,10 +27,13 @@ from azure.search.documents import SearchClient
 from azure.search.documents.indexes import SearchIndexClient
 from azure.search.documents.models import VectorizedQuery
 
+os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"] = "https://link-tech-cognitive-search.search.windows.net"
+os.environ["AZURE_SEARCH_INDEX_NAME"] = "vector-kitei"
+os.environ["AZURE_SEARCH_API_KEY"] = "xxxx"
+
 service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
 index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]
 key = os.environ["AZURE_SEARCH_API_KEY"]
-
 
 def get_embeddings(text: str):
     # There are a few ways to get embeddings. This is just one example.

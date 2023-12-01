@@ -21,6 +21,9 @@ USAGE:
 
 import os
 
+os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"] = "https://link-tech-cognitive-search.search.windows.net"
+os.environ["AZURE_SEARCH_INDEX_NAME"] = "vector-kitei"
+os.environ["AZURE_SEARCH_API_KEY"] = "xxxx"
 
 def speller():
     # [START speller]
@@ -33,10 +36,13 @@ def speller():
 
     credential = AzureKeyCredential(key)
     client = SearchClient(endpoint=service_endpoint, index_name=index_name, credential=credential)
-    results = list(client.search(search_text="luxury", query_language="en-us", query_speller="lexicon"))
+    # results = list(client.search(search_text="luxury", query_language="en-us", query_speller="lexicon"))
+    results = list(client.search(search_text="代休"))
 
-    for result in results:
-        print("{}\n{}\n)".format(result["hotelId"], result["hotelName"]))
+    # for result in results:
+        # print("{}\n{}\n)".format(result["hotelId"], result["hotelName"]))
+    print("chunk: {}".format(results[0]["chunk"]))
+    print("title: {}".format(results[0]["title"]))
     # [END speller]
 
 
@@ -53,15 +59,18 @@ def semantic_ranking():
     client = SearchClient(endpoint=service_endpoint, index_name=index_name, credential=credential)
     results = list(
         client.search(
-            search_text="luxury",
+#             search_text="luxury",
+            search_text="代休",
             query_type="semantic",
-            semantic_configuration_name="semantic_config_name",
-            query_language="en-us",
+            semantic_configuration_name="vector-kitei-semantic-configuration",
+#             query_language="en-us",
         )
     )
 
-    for result in results:
-        print("{}\n{}\n)".format(result["hotelId"], result["hotelName"]))
+    # for result in results:
+        # print("{}\n{}\n)".format(result["hotelId"], result["hotelName"]))
+    print("chunk: {}".format(results[0]["chunk"]))
+    print("title: {}".format(results[0]["title"]))
     # [END semantic_ranking]
 
 

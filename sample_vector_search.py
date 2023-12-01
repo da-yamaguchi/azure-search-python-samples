@@ -30,6 +30,8 @@ from azure.search.documents.models import VectorizedQuery
 os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"] = "https://link-tech-cognitive-search.search.windows.net"
 os.environ["AZURE_SEARCH_INDEX_NAME"] = "vector-kitei"
 os.environ["AZURE_SEARCH_API_KEY"] = "xxxx"
+os.environ["OpenAIEndpoint"] = "your_endpoint_value"
+os.environ["OpenAIKey"] = "your_key_value"
 
 service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
 index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]

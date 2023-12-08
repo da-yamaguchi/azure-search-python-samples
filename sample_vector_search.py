@@ -29,9 +29,9 @@ from azure.search.documents.models import VectorizedQuery
 
 os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"] = "https://link-tech-cognitive-search.search.windows.net"
 os.environ["AZURE_SEARCH_INDEX_NAME"] = "vector-kitei"
-os.environ["AZURE_SEARCH_API_KEY"] = "xxxx"
-os.environ["OpenAIEndpoint"] = "your_endpoint_value"
-os.environ["OpenAIKey"] = "your_key_value"
+os.environ["AZURE_SEARCH_API_KEY"] = "xxx"
+os.environ["OpenAIEndpoint"] = "https://link-tech-test-on-your-data-aoai.openai.azure.com/"
+os.environ["OpenAIKey"] = "xxx"
 
 service_endpoint = os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
 index_name = os.environ["AZURE_SEARCH_INDEX_NAME"]
@@ -53,104 +53,108 @@ def get_embeddings(text: str):
     return embedding.data[0].embedding
 
 
-def get_hotel_index(name: str):
-    from azure.search.documents.indexes.models import (
-        SearchIndex,
-        SearchField,
-        SearchFieldDataType,
-        SimpleField,
-        SearchableField,
-        VectorSearch,
-        VectorSearchProfile,
-        HnswAlgorithmConfiguration,
-    )
+# def get_hotel_index(name: str):
+#     from azure.search.documents.indexes.models import (
+#         SearchIndex,
+#         SearchField,
+#         SearchFieldDataType,
+#         SimpleField,
+#         SearchableField,
+#         VectorSearch,
+#         VectorSearchProfile,
+#         HnswAlgorithmConfiguration,
+#     )
 
-    fields = [
-        SimpleField(name="hotelId", type=SearchFieldDataType.String, key=True),
-        SearchableField(
-            name="hotelName",
-            type=SearchFieldDataType.String,
-            sortable=True,
-            filterable=True,
-        ),
-        SearchableField(name="description", type=SearchFieldDataType.String),
-        SearchField(
-            name="descriptionVector",
-            type=SearchFieldDataType.Collection(SearchFieldDataType.Single),
-            searchable=True,
-            vector_search_dimensions=1536,
-            vector_search_profile_name="my-vector-config",
-        ),
-        SearchableField(
-            name="category",
-            type=SearchFieldDataType.String,
-            sortable=True,
-            filterable=True,
-            facetable=True,
-        ),
-    ]
-    vector_search = VectorSearch(
-        profiles=[VectorSearchProfile(name="my-vector-config", algorithm_configuration_name="my-algorithms-config")],
-        algorithms=[HnswAlgorithmConfiguration(name="my-vector-config")],
-    )
-    return SearchIndex(name=name, fields=fields, vector_search=vector_search)
+#     fields = [
+#         SimpleField(name="hotelId", type=SearchFieldDataType.String, key=True),
+#         SearchableField(
+#             name="hotelName",
+#             type=SearchFieldDataType.String,
+#             sortable=True,
+#             filterable=True,
+#         ),
+#         SearchableField(name="description", type=SearchFieldDataType.String),
+#         SearchField(
+#             name="descriptionVector",
+#             type=SearchFieldDataType.Collection(SearchFieldDataType.Single),
+#             searchable=True,
+#             vector_search_dimensions=1536,
+#             vector_search_profile_name="my-vector-config",
+#         ),
+#         SearchableField(
+#             name="category",
+#             type=SearchFieldDataType.String,
+#             sortable=True,
+#             filterable=True,
+#             facetable=True,
+#         ),
+#     ]
+#     vector_search = VectorSearch(
+#         profiles=[VectorSearchProfile(name="my-vector-config", algorithm_configuration_name="my-algorithms-config")],
+#         algorithms=[HnswAlgorithmConfiguration(name="my-vector-config")],
+#     )
+#     return SearchIndex(name=name, fields=fields, vector_search=vector_search)
 
 
-def get_hotel_documents():
-    docs = [
-        {
-            "hotelId": "1",
-            "hotelName": "Fancy Stay",
-            "description": "Best hotel in town if you like luxury hotels.",
-            "descriptionVector": get_embeddings("Best hotel in town if you like luxury hotels."),
-            "category": "Luxury",
-        },
-        {
-            "hotelId": "2",
-            "hotelName": "Roach Motel",
-            "description": "Cheapest hotel in town. Infact, a motel.",
-            "descriptionVector": get_embeddings("Cheapest hotel in town. Infact, a motel."),
-            "category": "Budget",
-        },
-        {
-            "hotelId": "3",
-            "hotelName": "EconoStay",
-            "description": "Very popular hotel in town.",
-            "descriptionVector": get_embeddings("Very popular hotel in town."),
-            "category": "Budget",
-        },
-        {
-            "hotelId": "4",
-            "hotelName": "Modern Stay",
-            "description": "Modern architecture, very polite staff and very clean. Also very affordable.",
-            "descriptionVector": get_embeddings(
-                "Modern architecture, very polite staff and very clean. Also very affordable."
-            ),
-            "category": "Luxury",
-        },
-        {
-            "hotelId": "5",
-            "hotelName": "Secret Point",
-            "description": "One of the best hotel in town. The hotel is ideally located on the main commercial artery of the city in the heart of New York.",
-            "descriptionVector": get_embeddings(
-                "One of the best hotel in town. The hotel is ideally located on the main commercial artery of the city in the heart of New York."
-            ),
-            "category": "Boutique",
-        },
-    ]
-    return docs
+# def get_hotel_documents():
+#     docs = [
+#         {
+#             "hotelId": "1",
+#             "hotelName": "Fancy Stay",
+#             "description": "Best hotel in town if you like luxury hotels.",
+#             "descriptionVector": get_embeddings("Best hotel in town if you like luxury hotels."),
+#             "category": "Luxury",
+#         },
+#         {
+#             "hotelId": "2",
+#             "hotelName": "Roach Motel",
+#             "description": "Cheapest hotel in town. Infact, a motel.",
+#             "descriptionVector": get_embeddings("Cheapest hotel in town. Infact, a motel."),
+#             "category": "Budget",
+#         },
+#         {
+#             "hotelId": "3",
+#             "hotelName": "EconoStay",
+#             "description": "Very popular hotel in town.",
+#             "descriptionVector": get_embeddings("Very popular hotel in town."),
+#             "category": "Budget",
+#         },
+#         {
+#             "hotelId": "4",
+#             "hotelName": "Modern Stay",
+#             "description": "Modern architecture, very polite staff and very clean. Also very affordable.",
+#             "descriptionVector": get_embeddings(
+#                 "Modern architecture, very polite staff and very clean. Also very affordable."
+#             ),
+#             "category": "Luxury",
+#         },
+#         {
+#             "hotelId": "5",
+#             "hotelName": "Secret Point",
+#             "description": "One of the best hotel in town. The hotel is ideally located on the main commercial artery of the city in the heart of New York.",
+#             "descriptionVector": get_embeddings(
+#                 "One of the best hotel in town. The hotel is ideally located on the main commercial artery of the city in the heart of New York."
+#             ),
+#             "category": "Boutique",
+#         },
+#     ]
+#     return docs
 
 
 def single_vector_search():
     # [START single_vector_search]
-    query = "Top hotels in town"
+    # query = "Top hotels in town"
+    # query = "代休について教えて"
+    query = "チャットプレイグラウンドについて教えて"
 
     search_client = SearchClient(service_endpoint, index_name, AzureKeyCredential(key))
-    vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="descriptionVector")
+    # vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="descriptionVector")
+    vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="vector")
 
     results = search_client.search(
         vector_queries=[vector_query],
-        select=["hotelId", "hotelName"],
+        # select=["hotelId", "hotelName"],
+        select=["chunk", "title"],
     )
 
     for result in results:
@@ -160,16 +164,19 @@ def single_vector_search():
 
 def single_vector_search_with_filter():
     # [START single_vector_search_with_filter]
-    query = "Top hotels in town"
+    # query = "Top hotels in town"
+    query = "代休について教えて"
 
     search_client = SearchClient(service_endpoint, index_name, AzureKeyCredential(key))
-    vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="descriptionVector")
+    # vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="descriptionVector")
+    vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="vector")
 
     results = search_client.search(
         search_text="",
         vector_queries=[vector_query],
-        filter="category eq 'Luxury'",
-        select=["hotelId", "hotelName"],
+        filter="category eq 'Luxury'", # カテゴリが"Luxury"であるドキュメントのみを結果として取得します。
+        # select=["hotelId", "hotelName"],
+        select=["chunk", "title"],
     )
 
     for result in results:
@@ -179,15 +186,18 @@ def single_vector_search_with_filter():
 
 def simple_hybrid_search():
     # [START simple_hybrid_search]
-    query = "Top hotels in town"
+    # query = "Top hotels in town"
+    query = "代休について教えて"
 
     search_client = SearchClient(service_endpoint, index_name, AzureKeyCredential(key))
-    vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="descriptionVector")
+    # vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="descriptionVector")
+    vector_query = VectorizedQuery(vector=get_embeddings(query), k_nearest_neighbors=3, fields="vector")
 
     results = search_client.search(
         search_text=query,
         vector_queries=[vector_query],
-        select=["hotelId", "hotelName"],
+        # select=["hotelId", "hotelName"],
+        select=["chunk", "title"],
     )
     print(results.get_answers())
     for result in results:
@@ -198,12 +208,12 @@ def simple_hybrid_search():
 if __name__ == "__main__":
     credential = AzureKeyCredential(key)
     index_client = SearchIndexClient(service_endpoint, credential)
-    index = get_hotel_index(index_name)
-    index_client.create_index(index)
+    # index = get_hotel_index(index_name) インデックスはAzure Portal上で作成済みのため不要
+    # index_client.create_index(index) インデックスはAzure Portal上で作成済みのため不要
     client = SearchClient(service_endpoint, index_name, credential)
-    hotel_docs = get_hotel_documents()
-    client.upload_documents(documents=hotel_docs)
+    # hotel_docs = get_hotel_documents() インデックスはAzure Portal上で作成済みのため不要
+    # client.upload_documents(documents=hotel_docs) インデックスはAzure Portal上で作成済みのため不要
 
     single_vector_search()
-    single_vector_search_with_filter()
-    simple_hybrid_search()
+    # single_vector_search_with_filter() フィルタはいったん使わないでおく。便利そう
+    # simple_hybrid_search() ハイブリッドはいったん使わないでおく。
